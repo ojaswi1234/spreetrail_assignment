@@ -11,26 +11,24 @@ const Navbar = () => {
   };
 
   return (
-    <nav style={{ backgroundColor: '#5bc5a7', padding: '10px 0', color: 'white' }}>
-      <div className="container flex justify-between items-center">
-        <Link to="/" style={{ color: 'white', textDecoration: 'none', fontSize: '24px', fontWeight: 'bold' }}>
+    <nav>
+      <div className="nav-container">
+        <Link to="/" className="nav-logo">
           Splitwise
         </Link>
         {user ? (
-          <div className="flex items-center">
-            <Link to="/dashboard" style={{ color: 'white', marginRight: '20px', textDecoration: 'none', fontWeight: '500' }}>Dashboard</Link>
-            <span style={{ marginRight: '20px', color: 'rgba(255,255,255,0.8)' }}>{user.name}</span>
-            <button onClick={handleLogout} style={{ backgroundColor: 'transparent', border: '1px solid white', padding: '5px 15px' }}>
-              Logout
+          <div className="nav-auth-buttons">
+            <Link to="/dashboard" style={{ color: 'white', fontWeight: '500', fontSize: '14px' }}>Dashboard</Link>
+            <span style={{ color: 'rgba(255,255,255,0.9)', fontSize: '14px' }}>{user.name}</span>
+            <button onClick={handleLogout} style={{ backgroundColor: 'transparent', border: '1px solid white', padding: '5px 12px', borderRadius: '4px', color: 'white', fontSize: '12px' }}>
+              Log out
             </button>
           </div>
         ) : (
-          <div>
-            <Link to="/login" style={{ color: 'white', marginRight: '20px', textDecoration: 'none', fontWeight: '500' }}>Log in</Link>
+          <div className="nav-auth-buttons">
+            <Link to="/login" className="nav-login">Log in</Link>
             <Link to="/register">
-              <button style={{ backgroundColor: '#fff', color: '#5bc5a7', border: 'none', padding: '8px 20px' }}>
-                Sign up
-              </button>
+              <button className="nav-signup">Sign up</button>
             </Link>
           </div>
         )}
