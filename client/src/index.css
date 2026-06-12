@@ -57,18 +57,18 @@ nav {
   max-width: 1100px;
   margin: 0 auto;
   padding: 0 20px;
-  gap: 20px;
+  gap: 40px; /* Increased gap to ensure absolute separation */
 }
 
 .nav-logo {
   color: #111111;
-  font-size: 22px;
+  font-size: 24px;
   font-weight: 800;
   letter-spacing: -0.5px;
   display: flex;
   align-items: center;
-  white-space: nowrap;
-  flex-shrink: 0;
+  white-space: nowrap; /* Prevents text from breaking onto a new line */
+  flex-shrink: 0; /* Prevents the logo from shrinking */
 }
 
 .nav-logo span {
@@ -79,7 +79,8 @@ nav {
   display: flex;
   align-items: center;
   gap: 20px;
-  flex-shrink: 0;
+  white-space: nowrap; /* Prevents buttons from wrapping */
+  flex-shrink: 0; /* Prevents the buttons from shrinking into the logo */
 }
 
 .nav-login {
