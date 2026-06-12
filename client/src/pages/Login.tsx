@@ -30,33 +30,39 @@ const Login = () => {
   };
 
   return (
-    <div style={{ maxWidth: '400px', margin: '80px auto', padding: '0 20px' }}>
-      <h2 style={{ fontSize: '24px', color: '#999', marginBottom: '20px' }}>LOG IN</h2>
-      {error && <p style={{ color: 'red', fontSize: '14px' }}>{error}</p>}
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label>Email address</label>
-          <input 
-            type="email" 
-            value={email} 
-            onChange={(e) => setEmail(e.target.value)} 
-            required 
-          />
-        </div>
-        <div className="form-group">
-          <label>Password</label>
-          <input 
-            type="password" 
-            value={password} 
-            onChange={(e) => setPassword(e.target.value)} 
-            required 
-          />
-        </div>
-        <button type="submit" className="btn-primary" style={{ width: '100%', padding: '12px' }}>Log in</button>
-      </form>
-      <p style={{ marginTop: '20px', textAlign: 'center', fontSize: '14px', color: '#666' }}>
-        Don't have an account? <Link to="/register" style={{ color: '#5bc5a7' }}>Sign up</Link>
-      </p>
+    <div className="auth-container">
+      <div className="auth-card">
+        <h2 className="auth-title">Log in</h2>
+        <p className="auth-subtitle">Welcome back to Splitwise</p>
+        
+        {error && <div style={{ background: '#fee2e2', color: '#dc2626', padding: '10px', borderRadius: '6px', marginBottom: '20px', fontSize: '14px', textAlign: 'center' }}>{error}</div>}
+        
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label>Email address</label>
+            <input 
+              type="email" 
+              value={email} 
+              onChange={(e) => setEmail(e.target.value)} 
+              required 
+            />
+          </div>
+          <div className="form-group">
+            <label>Password</label>
+            <input 
+              type="password" 
+              value={password} 
+              onChange={(e) => setPassword(e.target.value)} 
+              required 
+            />
+          </div>
+          <button type="submit" className="btn-primary" style={{ width: '100%', padding: '12px', marginTop: '10px', fontSize: '16px' }}>Log in</button>
+        </form>
+        
+        <p style={{ marginTop: '24px', textAlign: 'center', fontSize: '14px', color: '#666' }}>
+          Don't have an account? <Link to="/register" style={{ color: 'var(--primary)', fontWeight: '600' }}>Sign up</Link>
+        </p>
+      </div>
     </div>
   );
 };

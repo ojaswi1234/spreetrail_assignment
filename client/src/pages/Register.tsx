@@ -31,42 +31,48 @@ const Register = () => {
   };
 
   return (
-    <div style={{ maxWidth: '400px', margin: '80px auto', padding: '0 20px' }}>
-      <h2 style={{ fontSize: '24px', color: '#999', marginBottom: '20px' }}>INTRODUCE YOURSELF</h2>
-      {error && <p style={{ color: 'red', fontSize: '14px' }}>{error}</p>}
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label>Hi there! My name is</label>
-          <input 
-            type="text" 
-            value={name} 
-            onChange={(e) => setName(e.target.value)} 
-            required 
-          />
-        </div>
-        <div className="form-group">
-          <label>Here's my email address:</label>
-          <input 
-            type="email" 
-            value={email} 
-            onChange={(e) => setEmail(e.target.value)} 
-            required 
-          />
-        </div>
-        <div className="form-group">
-          <label>And here's my password:</label>
-          <input 
-            type="password" 
-            value={password} 
-            onChange={(e) => setPassword(e.target.value)} 
-            required 
-          />
-        </div>
-        <button type="submit" className="btn-primary" style={{ width: '100%', padding: '12px' }}>Sign me up!</button>
-      </form>
-      <p style={{ marginTop: '20px', textAlign: 'center', fontSize: '14px', color: '#666' }}>
-        Already have an account? <Link to="/login" style={{ color: '#5bc5a7' }}>Log in</Link>
-      </p>
+    <div className="auth-container">
+      <div className="auth-card">
+        <h2 className="auth-title">Sign up</h2>
+        <p className="auth-subtitle">Start splitting expenses today</p>
+        
+        {error && <div style={{ background: '#fee2e2', color: '#dc2626', padding: '10px', borderRadius: '6px', marginBottom: '20px', fontSize: '14px', textAlign: 'center' }}>{error}</div>}
+        
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label>Your Name</label>
+            <input 
+              type="text" 
+              value={name} 
+              onChange={(e) => setName(e.target.value)} 
+              required 
+            />
+          </div>
+          <div className="form-group">
+            <label>Email address</label>
+            <input 
+              type="email" 
+              value={email} 
+              onChange={(e) => setEmail(e.target.value)} 
+              required 
+            />
+          </div>
+          <div className="form-group">
+            <label>Password</label>
+            <input 
+              type="password" 
+              value={password} 
+              onChange={(e) => setPassword(e.target.value)} 
+              required 
+            />
+          </div>
+          <button type="submit" className="btn-primary" style={{ width: '100%', padding: '12px', marginTop: '10px', fontSize: '16px' }}>Sign me up</button>
+        </form>
+        
+        <p style={{ marginTop: '24px', textAlign: 'center', fontSize: '14px', color: '#666' }}>
+          Already have an account? <Link to="/login" style={{ color: 'var(--primary)', fontWeight: '600' }}>Log in</Link>
+        </p>
+      </div>
     </div>
   );
 };

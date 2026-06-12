@@ -39,11 +39,11 @@ a {
    Navbar (Global)
    ----------------------- */
 nav {
-  background-color: var(--primary);
-  height: 54px; /* Exact Splitwise navbar height */
+  background-color: #ffffff;
+  height: 64px;
   display: flex;
   align-items: center;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  border-bottom: 1px solid #eaeaea;
   position: sticky;
   top: 0;
   z-index: 1000;
@@ -54,21 +54,25 @@ nav {
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  max-width: 1000px;
+  max-width: 1100px;
   margin: 0 auto;
   padding: 0 20px;
   gap: 20px;
 }
 
 .nav-logo {
-  color: white;
-  font-size: 24px;
-  font-weight: bold;
+  color: #111111;
+  font-size: 22px;
+  font-weight: 800;
   letter-spacing: -0.5px;
   display: flex;
   align-items: center;
   white-space: nowrap;
   flex-shrink: 0;
+}
+
+.nav-logo span {
+  color: var(--primary);
 }
 
 .nav-auth-buttons {
@@ -79,30 +83,33 @@ nav {
 }
 
 .nav-login {
-  color: white;
+  color: #555555;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   padding: 5px 10px;
+  transition: color 0.2s;
 }
 
 .nav-login:hover {
-  text-decoration: underline;
+  color: #111111;
 }
 
 .nav-signup {
-  background-color: white;
-  color: var(--primary);
+  background-color: var(--primary);
+  color: white;
   border: none;
-  padding: 6px 14px;
-  border-radius: 4px;
+  padding: 8px 18px;
+  border-radius: 6px;
   font-size: 14px;
-  font-weight: bold;
+  font-weight: 600;
   cursor: pointer;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px rgba(28, 194, 159, 0.2);
+  transition: transform 0.1s, box-shadow 0.1s;
 }
 
 .nav-signup:hover {
-  background-color: #f8f8f8;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(28, 194, 159, 0.3);
 }
 
 /* -----------------------
@@ -112,28 +119,29 @@ nav {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 80px 0 100px;
-  gap: 40px;
+  padding: 100px 0;
+  gap: 60px;
 }
 
 .hero-text {
   flex: 1;
-  max-width: 450px;
+  max-width: 500px;
 }
 
 .hero-text h1 {
-  font-size: 46px;
-  line-height: 1.1;
-  margin-bottom: 20px;
-  color: #333;
-  font-weight: 600;
+  font-size: 56px;
+  line-height: 1.05;
+  margin-bottom: 24px;
+  color: #111;
+  font-weight: 800;
+  letter-spacing: -1px;
 }
 
 .hero-text p {
-  font-size: 22px;
-  line-height: 1.4;
-  color: #333;
-  margin-bottom: 30px;
+  font-size: 20px;
+  line-height: 1.5;
+  color: #555;
+  margin-bottom: 40px;
 }
 
 .hero-visual {
@@ -142,31 +150,94 @@ nav {
   justify-content: flex-end;
 }
 
+.hero-image-placeholder {
+  width: 100%;
+  max-width: 500px;
+  height: 400px;
+  background: linear-gradient(135deg, #ffffff 0%, #f4f5f7 100%);
+  border: 1px solid #eaeaea;
+  border-radius: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary);
+  font-size: 80px;
+  box-shadow: 0 24px 48px rgba(0,0,0,0.05);
+}
+
 /* Feature Grid */
 .features-section {
-  padding: 60px 0;
-  background-color: #f6f6f6;
-  border-top: 1px solid #e5e5e5;
-  border-bottom: 1px solid #e5e5e5;
+  padding: 80px 0;
 }
 
 .features-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 40px;
+  gap: 30px;
   text-align: left;
 }
 
+.feature-card {
+  background: white;
+  padding: 30px;
+  border-radius: 16px;
+  border: 1px solid #eaeaea;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.03);
+  transition: transform 0.2s;
+}
+
+.feature-card:hover {
+  transform: translateY(-4px);
+}
+
 .feature-card h3 {
-  font-size: 18px;
-  margin: 15px 0 10px;
-  color: #333;
+  font-size: 20px;
+  margin: 20px 0 12px;
+  color: #111;
+  font-weight: 700;
 }
 
 .feature-card p {
-  font-size: 14px;
+  font-size: 15px;
   color: #666;
-  line-height: 1.5;
+  line-height: 1.6;
+}
+
+/* -----------------------
+   Auth Pages
+   ----------------------- */
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 64px);
+  padding: 40px 20px;
+}
+
+.auth-card {
+  background: white;
+  width: 100%;
+  max-width: 420px;
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+  border: 1px solid #eaeaea;
+}
+
+.auth-title {
+  font-size: 28px;
+  font-weight: 800;
+  color: #111;
+  text-align: center;
+  margin-bottom: 8px;
+  letter-spacing: -0.5px;
+}
+
+.auth-subtitle {
+  text-align: center;
+  color: #666;
+  font-size: 15px;
+  margin-bottom: 30px;
 }
 
 /* Buttons */

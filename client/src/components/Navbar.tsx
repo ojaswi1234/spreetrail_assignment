@@ -14,13 +14,13 @@ const Navbar = () => {
     <nav>
       <div className="nav-container">
         <Link to="/" className="nav-logo">
-          Splitwise
+          Split<span>wise</span>
         </Link>
         {user ? (
           <div className="nav-auth-buttons">
-            <Link to="/dashboard" style={{ color: 'white', fontWeight: '500', fontSize: '14px' }}>Dashboard</Link>
-            <span style={{ color: 'rgba(255,255,255,0.9)', fontSize: '14px' }}>{user.name}</span>
-            <button onClick={handleLogout} style={{ backgroundColor: 'transparent', border: '1px solid white', padding: '5px 12px', borderRadius: '4px', color: 'white', fontSize: '12px' }}>
+            <Link to="/dashboard" style={{ color: '#555', fontWeight: '600', fontSize: '14px' }}>Dashboard</Link>
+            <span style={{ color: '#111', fontSize: '14px', fontWeight: '600' }}>{user.name}</span>
+            <button onClick={handleLogout} style={{ backgroundColor: '#f4f5f7', border: '1px solid #eaeaea', padding: '6px 14px', borderRadius: '6px', color: '#555', fontSize: '13px', fontWeight: '600', cursor: 'pointer' }}>
               Log out
             </button>
           </div>
