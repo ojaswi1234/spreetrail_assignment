@@ -18,12 +18,12 @@ const app = (0, express_1.default)();
 const server = http_1.default.createServer(app);
 const io = new socket_io_1.Server(server, {
     cors: {
-        origin: '*', // For development, allow all origins
+        origin: 'https://spreetrail-assignment.vercel.app', // Allow only production frontend
         methods: ['GET', 'POST'],
     },
 });
 exports.io = io;
-app.use((0, cors_1.default)());
+app.use((0, cors_1.default)({ origin: 'https://spreetrail-assignment.vercel.app' }));
 app.use(express_1.default.json());
 // Socket.io logic
 io.on('connection', (socket) => {
