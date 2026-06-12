@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import ExpenseChat from '../components/ExpenseChat';
-import { Tag, ChevronDown, MessageSquare } from 'lucide-react';
+import { Tag, ChevronDown, MessageSquare, Plus, DollarSign, UserPlus } from 'lucide-react';
 
 interface Expense {
   id: string;
@@ -169,52 +169,52 @@ const GroupDetail = () => {
 
   return (
     <div>
-      <div className="dashboard-header">
-        <h1>{group.name}</h1>
-        <button className="btn-primary" onClick={() => setShowExpenseForm(!showExpenseForm)}>
-          {showExpenseForm ? 'Cancel' : 'Add an expense'}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+        <h1 style={{ fontSize: '28px', color: '#111' }}>{group.name}</h1>
+        <button className="btn-primary" onClick={() => setShowExpenseForm(!showExpenseForm)} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+          <Plus size={16} /> {showExpenseForm ? 'Cancel' : 'Add an expense'}
         </button>
       </div>
 
-      <div className="content-padded" style={{ display: 'flex', gap: '40px' }}>
+      <div style={{ display: 'flex', gap: '30px', alignItems: 'flex-start' }}>
+        {/* Left Column: Expenses */}
         <div style={{ flex: 2 }}>
           {showExpenseForm && (
-            <div className="card" style={{ padding: '20px', borderBottom: '2px solid #5bc5a7' }}>
-              <h3 style={{ borderBottom: '1px solid #eee', paddingBottom: '10px' }}>Add an expense</h3>
+            <div className="card">
+              <div className="card-header">
+                <h3>Add a new expense</h3>
+              </div>
               <form onSubmit={handleCreateExpense}>
                 <div className="form-group">
-                  <label>With you and: all of {group.name}</label>
-                  <input placeholder="Enter a description" value={desc} onChange={e => setDesc(e.target.value)} required />
+                  <label>Description</label>
+                  <input placeholder="e.g. Dinner, Uber, Groceries" value={desc} onChange={e => setDesc(e.target.value)} required />
                 </div>
                 <div className="form-group">
                   <label>Amount</label>
-                  <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <span style={{ fontSize: '24px', marginRight: '10px' }}>$</span>
-                    <input type="number" step="0.01" placeholder="0.00" value={amount} onChange={e => setAmount(e.target.value)} required style={{ fontSize: '24px', width: '200px' }} />
-                  </div>
+                  <input type="number" step="0.01" placeholder="0.00" value={amount} onChange={e => setAmount(e.target.value)} required />
                 </div>
                 
                 <div className="form-group">
-                  <label>Paid by you and split:</label>
+                  <label>Split Type</label>
                   <select value={splitType} onChange={e => setSplitType(e.target.value)}>
-                    <option value="EQUAL">equally</option>
-                    <option value="EXACT">exact amounts</option>
-                    <option value="PERCENT">percentages</option>
-                    <option value="SHARE">shares</option>
+                    <option value="EQUAL">Split equally</option>
+                    <option value="EXACT">Exact amounts</option>
+                    <option value="PERCENT">Percentages</option>
+                    <option value="SHARE">By shares</option>
                   </select>
                 </div>
 
                 {splitType !== 'EQUAL' && (
-                  <div className="card" style={{ marginBottom: '15px', background: '#f9f9f9' }}>
-                    <p style={{ fontSize: '13px', color: '#666' }}>Enter {splitType === 'EXACT' ? 'amounts' : splitType === 'PERCENT' ? 'percentages' : 'shares'} for each member:</p>
+                  <div style={{ marginBottom: '20px', padding: '16px', background: '#f9fafa', borderRadius: '8px', border: '1px solid #eaeaea' }}>
+                    <p style={{ fontSize: '13px', color: '#666', marginBottom: '12px' }}>Enter {splitType === 'EXACT' ? 'amounts' : splitType === 'PERCENT' ? 'percentages' : 'shares'} for each member:</p>
                     {group.members.map((m: any) => (
-                      <div key={m.user.id} className="flex items-center justify-between" style={{ marginBottom: '10px' }}>
-                        <span>{m.user.name}</span>
+                      <div key={m.user.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
+                        <span style={{ fontSize: '14px', fontWeight: '500' }}>{m.user.name}</span>
                         <input 
                           type="number" 
                           step="0.01"
                           placeholder={splitType} 
-                          style={{ width: '100px', marginBottom: 0 }}
+                          style={{ width: '120px', marginBottom: 0 }}
                           value={memberSplits[m.user.id] || ''}
                           onChange={e => setMemberSplits({...memberSplits, [m.user.id]: e.target.value})}
                           required
@@ -224,32 +224,36 @@ const GroupDetail = () => {
                   </div>
                 )}
 
-                <button type="submit" className="btn-primary" style={{ width: '100%' }}>Save</button>
+                <button type="submit" className="btn-primary" style={{ width: '100%', padding: '12px' }}>Save Expense</button>
               </form>
             </div>
           )}
 
-          <div style={{ marginTop: '10px' }}>
+          <div className="card">
+            <div className="card-header">
+              <h3>Expenses</h3>
+            </div>
             {expenses.map(exp => (
               <div key={exp.id}>
                 <div 
                   className="expense-item"
                   onClick={() => setSelectedExpenseId(selectedExpenseId === exp.id ? null : exp.id)}
+                  style={{ cursor: 'pointer', border: selectedExpenseId === exp.id ? '1px solid var(--primary)' : '1px solid #eaeaea' }}
                 >
                   <div className="expense-date">
                     {new Date(exp.createdAt).toLocaleString('en-us', { month: 'short' })}<br />
                     <span style={{ fontSize: '16px', color: '#333' }}>{new Date(exp.createdAt).getDate()}</span>
                   </div>
-                  <div className="expense-icon"><Tag size={20} /></div>
+                  <div className="expense-icon" style={{ borderRadius: '8px', background: 'rgba(28, 194, 159, 0.1)', color: 'var(--primary)' }}><Tag size={20} /></div>
                   <div className="expense-info">
                     <div className="expense-name">{exp.description}</div>
                     <div className="expense-meta">
-                      {exp.paidBy.id === user?.id ? 'you' : exp.paidBy.name} paid <span style={{ fontWeight: '500' }}>${exp.amount.toFixed(2)}</span>
+                      {exp.paidBy.id === user?.id ? 'You' : exp.paidBy.name} paid <span style={{ fontWeight: '600' }}>${exp.amount.toFixed(2)}</span>
                     </div>
                   </div>
                   <div className="expense-amounts">
                     <div className="amount-box">
-                      <span className="amount-label">{exp.paidBy.id === user?.id ? 'you lent' : 'you borrowed'}</span>
+                      <span className="amount-label">{exp.paidBy.id === user?.id ? 'You lent' : 'You borrowed'}</span>
                       <span className={`amount-value ${exp.paidBy.id === user?.id ? 'text-positive' : 'text-negative'}`}>
                         ${(exp.amount / group.members.length).toFixed(2)}
                       </span>
@@ -258,10 +262,10 @@ const GroupDetail = () => {
                   </div>
                 </div>
                 {selectedExpenseId === exp.id && (
-                  <div className="card" style={{ padding: '20px', backgroundColor: '#f9f9f9' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', marginBottom: '15px', fontSize: '14px', color: '#666' }}>
+                  <div style={{ padding: '20px', backgroundColor: '#f9fafa', borderRadius: '8px', border: '1px solid #eaeaea', marginBottom: '16px', marginTop: '-8px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', marginBottom: '16px', fontSize: '14px', color: '#555', fontWeight: '600' }}>
                       <MessageSquare size={16} style={{ marginRight: '8px' }} />
-                      <strong>Notes and comments</strong>
+                      Discussion & Notes
                     </div>
                     <ExpenseChat expenseId={exp.id} />
                   </div>
@@ -269,69 +273,88 @@ const GroupDetail = () => {
               </div>
             ))}
             {expenses.length === 0 && (
-              <div style={{ textAlign: 'center', padding: '60px', color: '#ccc' }}>
-                <p>No expenses added yet in this group.</p>
+              <div style={{ textAlign: 'center', padding: '40px', color: '#9ca3af' }}>
+                <Tag size={48} style={{ opacity: 0.5, marginBottom: '16px' }} />
+                <p>No expenses added yet.</p>
               </div>
             )}
           </div>
         </div>
 
-        <div style={{ flex: 1 }}>
-          <div className="card" style={{ border: 'none', background: 'transparent', padding: '0' }}>
-            <h3 style={{ color: '#999', fontSize: '12px', textTransform: 'uppercase', marginBottom: '15px' }}>Group Balances</h3>
+        {/* Right Column: Sidebar modules */}
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '24px' }}>
+          
+          {/* Balances Card */}
+          <div className="card" style={{ marginBottom: 0 }}>
+            <div className="card-header">
+              <h3>Group Balances</h3>
+            </div>
             {group.members.map((m: any) => {
               const balance = balances[m.user.id] || 0;
               return (
-                <div key={m.user.id} className="flex justify-between" style={{ marginBottom: '12px', fontSize: '14px' }}>
-                  <span style={{ color: '#333' }}>{m.user.name} {m.user.id === user?.id && '(You)'}</span>
-                  <span style={{ color: balance > 0 ? '#5bc5a7' : balance < 0 ? '#ff652f' : '#999', fontWeight: 'bold' }}>
-                    {balance > 0 ? `owes $${balance.toFixed(2)}` : balance < 0 ? `is owed $${Math.abs(balance).toFixed(2)}` : 'is settled up'}
+                <div key={m.user.id} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px', fontSize: '14px', borderBottom: '1px solid #f0f0f0', paddingBottom: '12px' }}>
+                  <span style={{ color: '#111', fontWeight: '500' }}>{m.user.name} {m.user.id === user?.id && <span style={{ color: '#999', fontSize: '12px' }}>(You)</span>}</span>
+                  <span style={{ color: balance > 0 ? 'var(--primary)' : balance < 0 ? 'var(--secondary)' : '#999', fontWeight: 'bold' }}>
+                    {balance > 0 ? `owes $${balance.toFixed(2)}` : balance < 0 ? `gets back $${Math.abs(balance).toFixed(2)}` : 'settled up'}
                   </span>
                 </div>
               );
             })}
           </div>
 
-          <div className="card" style={{ marginTop: '30px', backgroundColor: '#f9f9f9', borderRadius: '4px' }}>
-            <h3>Settle up</h3>
+          {/* Settle Up Card */}
+          <div className="card" style={{ marginBottom: 0 }}>
+            <div className="card-header">
+              <h3 style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><DollarSign size={18} /> Settle Up</h3>
+            </div>
             <form onSubmit={handleSettle}>
-              <select 
-                value={settleToId} 
-                onChange={e => setSettleToId(e.target.value)} 
-                required 
-                style={{ background: 'white' }}
-              >
-                <option value="">Choose a member</option>
-                {group.members.filter((m: any) => m.user.id !== user?.id).map((m: any) => (
-                  <option key={m.user.id} value={m.user.id}>{m.user.name}</option>
-                ))}
-              </select>
-              <input 
-                type="number" 
-                step="0.01"
-                placeholder="Amount" 
-                value={settleAmount} 
-                onChange={e => setSettleAmount(e.target.value)} 
-                required 
-                style={{ background: 'white' }}
-              />
+              <div className="form-group">
+                <label>Record a payment to</label>
+                <select 
+                  value={settleToId} 
+                  onChange={e => setSettleToId(e.target.value)} 
+                  required 
+                >
+                  <option value="">Choose a member</option>
+                  {group.members.filter((m: any) => m.user.id !== user?.id).map((m: any) => (
+                    <option key={m.user.id} value={m.user.id}>{m.user.name}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="form-group">
+                <label>Amount</label>
+                <input 
+                  type="number" 
+                  step="0.01"
+                  placeholder="0.00" 
+                  value={settleAmount} 
+                  onChange={e => setSettleAmount(e.target.value)} 
+                  required 
+                />
+              </div>
               <button type="submit" className="btn-primary" style={{ width: '100%' }}>Record Payment</button>
             </form>
           </div>
 
-          <div className="card" style={{ marginTop: '30px', border: '1px dashed #ccc', background: 'transparent' }}>
-            <h3 style={{ fontSize: '14px' }}>Invite members</h3>
+          {/* Invite Card */}
+          <div className="card" style={{ marginBottom: 0, backgroundColor: '#f9fafa' }}>
+            <div className="card-header" style={{ borderBottom: 'none', marginBottom: 0, paddingBottom: '10px' }}>
+              <h3 style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><UserPlus size={18} /> Invite Members</h3>
+            </div>
             <form onSubmit={handleAddMember}>
-              <input 
-                type="email" 
-                placeholder="Email address" 
-                value={newMemberEmail} 
-                onChange={e => setNewMemberEmail(e.target.value)} 
-                required 
-              />
-              <button type="submit" className="btn-primary" style={{ width: '100%', background: '#eee', color: '#333' }}>Send invite</button>
+              <div className="form-group" style={{ marginBottom: '10px' }}>
+                <input 
+                  type="email" 
+                  placeholder="Friend's email address" 
+                  value={newMemberEmail} 
+                  onChange={e => setNewMemberEmail(e.target.value)} 
+                  required 
+                />
+              </div>
+              <button type="submit" style={{ width: '100%', background: '#fff', border: '1px solid #d1d5db', color: '#111', padding: '8px 16px', borderRadius: '6px', fontWeight: '600' }}>Send Invite</button>
             </form>
           </div>
+
         </div>
       </div>
     </div>

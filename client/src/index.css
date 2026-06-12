@@ -203,70 +203,132 @@ nav {
 }
 
 /* -----------------------
-   App Layout (Dashboard/Groups)
+   App Layout (Modern Card UI)
    ----------------------- */
+body {
+  background-color: #f4f5f7; /* Soft gray canvas */
+}
+
 .layout-wrapper {
   display: flex;
-  max-width: 1000px;
+  max-width: 1100px; /* Slightly wider for cards */
   margin: 40px auto;
   padding: 0 20px;
-  gap: 20px;
+  gap: 40px;
   align-items: flex-start;
 }
 
 .sidebar {
-  width: 190px;
+  width: 220px;
   flex-shrink: 0;
+}
+
+.sidebar a {
+  padding: 10px 14px;
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+
+.sidebar a:hover {
+  background: #ffffff;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  color: var(--primary);
 }
 
 .main-content {
   flex: 1;
-  background-color: var(--white);
-  box-shadow: 0 0 12px rgba(0,0,0,0.1);
-  border-radius: 4px;
   min-height: 600px;
-  overflow: hidden;
+  /* Removed the giant white box styling */
 }
 
-.dashboard-header {
-  background-color: #eeeeee;
-  padding: 15px 20px;
-  border-bottom: 1px solid var(--border-dark);
+/* Modern Cards */
+.card {
+  background: #ffffff;
+  border: 1px solid #eaeaea;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.03);
+  margin-bottom: 24px;
+}
+
+.card-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #f0f0f0;
+  padding-bottom: 16px;
 }
 
-.dashboard-header h1 {
-  font-size: 24px;
-  font-weight: bold;
-  color: #333;
+.card-header h2, .card-header h3 {
   margin: 0;
-}
-
-.content-padded {
-  padding: 20px;
+  font-size: 18px;
+  color: #111;
+  font-weight: 600;
 }
 
 /* Forms & Inputs */
 input, select {
-  padding: 8px 12px;
-  border: 1px solid var(--border-dark);
-  border-radius: 4px;
+  padding: 10px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
   width: 100%;
   font-size: 14px;
-  margin-bottom: 15px;
+  margin-bottom: 16px;
+  background-color: #fdfdfd;
+  transition: border 0.2s, box-shadow 0.2s;
 }
 
-input:focus {
+input:focus, select:focus {
   outline: none;
   border-color: var(--primary);
-  box-shadow: 0 0 5px rgba(28, 194, 159, 0.3);
+  background-color: #ffffff;
+  box-shadow: 0 0 0 3px rgba(28, 194, 159, 0.15);
 }
 
-.card {
-  border: 1px solid var(--border-light);
-  padding: 15px;
-  border-radius: 4px;
-  background: white;
+.form-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #555;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Dashboard Summary Cards */
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.summary-card {
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid #eaeaea;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.03);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Expense Items */
+.expense-item {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  border: 1px solid #eaeaea;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  transition: all 0.2s;
+  background: #fff;
+}
+
+.expense-item:hover {
+  border-color: #d1d5db;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  transform: translateY(-1px);
 }
