@@ -84,6 +84,26 @@ const GroupDetail = () => {
     }
   };
 
+  const handleRemoveMember = async (userIdToRemove: string) => {
+    if (!window.confirm('Are you sure you want to remove this member?')) return;
+    try {
+      const response = await fetch(`https://spreetrail-assignment-backend.onrender.com/api/groups/${id}/members/${userIdToRemove}`, {
+        method: 'DELETE',
+        headers: { 
+          Authorization: `Bearer ${token}` 
+        },
+      });
+      if (response.ok) {
+        fetchGroupData();
+      } else {
+        const data = await response.json();
+        alert(data.message);
+      }
+    } catch (err) {
+      console.error('Error removing member');
+    }
+  };
+
   const handleCreateExpense = async (e: React.FormEvent) => {
     e.preventDefault();
     const totalAmount = parseFloat(amount);
@@ -292,11 +312,20 @@ const GroupDetail = () => {
             {group.members.map((m: any) => {
               const balance = balances[m.user.id] || 0;
               return (
-                <div key={m.user.id} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px', fontSize: '14px', borderBottom: '1px solid #f0f0f0', paddingBottom: '12px' }}>
-                  <span style={{ color: '#111', fontWeight: '500' }}>{m.user.name} {m.user.id === user?.id && <span style={{ color: '#999', fontSize: '12px' }}>(You)</span>}</span>
-                  <span style={{ color: balance > 0 ? 'var(--primary)' : balance < 0 ? 'var(--secondary)' : '#999', fontWeight: 'bold' }}>
-                    {balance > 0 ? `owes $${balance.toFixed(2)}` : balance < 0 ? `gets back $${Math.abs(balance).toFixed(2)}` : 'settled up'}
+                <div key={m.user.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', fontSize: '14px', borderBottom: '1px solid #f0f0f0', paddingBottom: '12px' }}>
+                  <span style={{ color: '#111', fontWeight: '500' }}>
+                    {m.user.name} {m.user.id === user?.id && <span style={{ color: '#999', fontSize: '12px' }}>(You)</span>}
                   </span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <span style={{ color: balance > 0 ? 'var(--primary)' : balance < 0 ? 'var(--secondary)' : '#999', fontWeight: 'bold' }}>
+                      {balance > 0 ? `owes $${balance.toFixed(2)}` : balance < 0 ? `gets back $${Math.abs(balance).toFixed(2)}` : 'settled up'}
+                    </span>
+                    {m.user.id !== user?.id && (
+                      <button onClick={() => handleRemoveMember(m.user.id)} style={{ background: 'transparent', border: 'none', color: '#dc2626', fontSize: '12px', cursor: 'pointer', padding: '0 4px' }} title="Remove user">
+                        ✕
+                      </button>
+                    )}
+                  </div>
                 </div>
               );
             })}
