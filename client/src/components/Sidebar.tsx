@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { Home, Users, List } from 'lucide-react';
+import { Home, Users } from 'lucide-react';
 
 const Sidebar = () => {
   const { user } = useAuth();

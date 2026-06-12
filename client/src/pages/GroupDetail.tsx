@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import ExpenseChat from '../components/ExpenseChat';
-import { Calendar, Tag, ChevronDown, MessageSquare } from 'lucide-react';
+import { Tag, ChevronDown, MessageSquare } from 'lucide-react';
 
 interface Expense {
   id: string;
