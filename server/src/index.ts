@@ -14,12 +14,12 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: '*', // For development, allow all origins
+    origin: 'https://spreetrail-assignment.vercel.app', // Allow only production frontend
     methods: ['GET', 'POST'],
   },
 });
 
-app.use(cors());
+app.use(cors({ origin: 'https://spreetrail-assignment.vercel.app' }));
 app.use(express.json());
 
 // Socket.io logic

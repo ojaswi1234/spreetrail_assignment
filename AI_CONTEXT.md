@@ -19,7 +19,12 @@ A simplified clone of Splitwise for managing shared expenses within groups. User
 - **Architecture**: Monorepo or separate client/server folders? Let's go with a simple **Client/Server separation**.
 - **State Management**: React Context API or simple hooks for MVP speed.
 - **Real-time**: Socket.io for the expense chat and instant balance updates.
-- **Styling**: Vanilla CSS to prioritize performance and flexibility, avoiding the overhead of Tailwind for this specific 2-day sprint.
+- **Styling**: Vanilla CSS, polished with the signature **Splitwise theme** (teal/orange color palette).
+- **Frontend structure**:
+    - **Marketing Landing Page**: Public-facing `/` with hero section and feature grid.
+    - **App Dashboard**: Protected `/dashboard` for group and balance overview.
+    - **Group Detail**: Granular view of group members, expenses, and settlements.
+    - **UI Pattern**: Left-hand sidebar navigation with a responsive main content area.
 
 ## 4. Engineering Requirements & Tech Stack
 - **Frontend**: Vite, React, TypeScript.
@@ -28,7 +33,10 @@ A simplified clone of Splitwise for managing shared expenses within groups. User
 - **ORM**: Prisma (for type-safe database access).
 - **Authentication**: JWT (JSON Web Tokens) stored in HTTP-only cookies or localStorage.
 - **Real-time**: Socket.io.
-- **Deployment**: Vercel/Netlify (Frontend), Render/Railway (Backend & DB).
+- **Deployment**: 
+    - **Frontend**: https://spreetrail-assignment.vercel.app (Vercel)
+    - **Backend**: https://spreetrail-assignment-backend.onrender.com (Render)
+    - **Database**: Managed PostgreSQL (Render)
 
 ## 5. Database Schema (Draft)
 - `User`: id, email, password, name

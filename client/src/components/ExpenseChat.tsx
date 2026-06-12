@@ -20,7 +20,7 @@ const ExpenseChat = ({ expenseId }: { expenseId: string }) => {
   useEffect(() => {
     fetchMessages();
     
-    socketRef.current = io('http://localhost:5000');
+    socketRef.current = io('https://spreetrail-assignment-backend.onrender.com');
     socketRef.current.emit('join-expense', expenseId);
 
     socketRef.current.on('new-message', (data: Message) => {
@@ -38,7 +38,7 @@ const ExpenseChat = ({ expenseId }: { expenseId: string }) => {
 
   const fetchMessages = async () => {
     try {
-      const response = await fetch(`http://localhost:5000/api/expenses/${expenseId}/chat`, {
+      const response = await fetch(`https://spreetrail-assignment-backend.onrender.com/api/expenses/${expenseId}/chat`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (response.ok) {
@@ -69,7 +69,7 @@ const ExpenseChat = ({ expenseId }: { expenseId: string }) => {
 
     try {
       // Save to DB
-      await fetch(`http://localhost:5000/api/expenses/${expenseId}/chat`, {
+      await fetch(`https://spreetrail-assignment-backend.onrender.com/api/expenses/${expenseId}/chat`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
