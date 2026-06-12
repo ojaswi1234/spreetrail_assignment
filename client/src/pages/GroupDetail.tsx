@@ -176,7 +176,7 @@ const GroupDetail = () => {
         </button>
       </div>
 
-      <div style={{ display: 'flex', gap: '30px', marginTop: '20px' }}>
+      <div className="content-padded" style={{ display: 'flex', gap: '40px' }}>
         <div style={{ flex: 2 }}>
           {showExpenseForm && (
             <div className="card" style={{ padding: '20px', borderBottom: '2px solid #5bc5a7' }}>
