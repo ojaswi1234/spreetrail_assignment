@@ -14,7 +14,7 @@ const Sidebar = () => {
           <Home size={18} style={{ marginRight: '10px' }} /> Dashboard
         </Link>
         <div style={{ color: '#999', fontSize: '12px', textTransform: 'uppercase', paddingLeft: '10px', marginBottom: '10px', marginTop: '20px', fontWeight: 'bold' }}>Groups</div>
-        <Link to="/dashboard" style={{ display: 'flex', alignItems: 'center', color: '#666', textDecoration: 'none', marginBottom: '10px', fontSize: '14px' }}>
+        <Link to="/groups" style={{ display: 'flex', alignItems: 'center', color: '#666', textDecoration: 'none', marginBottom: '10px', fontSize: '14px' }}>
           <Users size={18} style={{ marginRight: '10px' }} /> View All Groups
         </Link>
       </div>

@@ -8,7 +8,7 @@ interface Group {
   name: string;
 }
 
-const Dashboard = () => {
+const AllGroups = () => {
   const [groups, setGroups] = useState<Group[]>([]);
   const [newGroupName, setNewGroupName] = useState('');
   const [showForm, setShowForm] = useState(false);
@@ -56,22 +56,7 @@ const Dashboard = () => {
   return (
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
-        <h1 style={{ fontSize: '28px', color: '#111' }}>Dashboard</h1>
-      </div>
-
-      <div className="summary-grid">
-        <div className="summary-card">
-          <div className="amount-label">Total Balance</div>
-          <div className="amount-value" style={{ fontSize: '24px', marginTop: '8px' }}>$0.00</div>
-        </div>
-        <div className="summary-card">
-          <div className="amount-label">You Owe</div>
-          <div className="amount-value text-negative" style={{ fontSize: '24px', marginTop: '8px' }}>$0.00</div>
-        </div>
-        <div className="summary-card">
-          <div className="amount-label">You Are Owed</div>
-          <div className="amount-value text-positive" style={{ fontSize: '24px', marginTop: '8px' }}>$0.00</div>
-        </div>
+        <h1 style={{ fontSize: '28px', color: '#111' }}>All Groups</h1>
       </div>
 
       <div className="card">
@@ -99,7 +84,7 @@ const Dashboard = () => {
         )}
 
         <div>
-          {groups.slice(0, 3).map((group) => (
+          {groups.map((group) => (
             <Link key={group.id} to={`/group/${group.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
               <div className="expense-item">
                 <div className="expense-icon" style={{ borderRadius: '8px', background: 'rgba(28, 194, 159, 0.1)', color: 'var(--primary)' }}><Users size={20} /></div>
@@ -122,17 +107,10 @@ const Dashboard = () => {
               <p>You haven't added any groups yet.</p>
             </div>
           )}
-          {groups.length > 3 && (
-            <div style={{ textAlign: 'center', marginTop: '20px' }}>
-              <Link to="/groups" className="btn-primary" style={{ display: 'inline-block', textDecoration: 'none', background: '#f4f5f7', color: '#111', border: '1px solid #d1d5db' }}>
-                View all groups
-              </Link>
-            </div>
-          )}
         </div>
       </div>
     </div>
   );
 };
 
-export default Dashboard;
+export default AllGroups;

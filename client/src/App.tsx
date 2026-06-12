@@ -5,6 +5,7 @@ import Landing from './pages/Landing';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
+import AllGroups from './pages/AllGroups';
 import GroupDetail from './pages/GroupDetail';
 import Navbar from './components/Navbar';
 import Sidebar from './components/Sidebar';
@@ -39,6 +40,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <Dashboard />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/groups" 
+              element={
+                <ProtectedRoute>
+                  <AllGroups />
                 </ProtectedRoute>
               } 
             />

@@ -196,6 +196,70 @@ const GroupDetail = () => {
         </button>
       </div>
 
+      {/* Horizontal Cards: Balances and Settle Up */}
+      <div style={{ display: 'flex', gap: '30px', marginBottom: '30px' }}>
+        {/* Balances Card */}
+        <div className="card" style={{ flex: 1, marginBottom: 0 }}>
+          <div className="card-header">
+            <h3>Group Balances</h3>
+          </div>
+          {group.members.map((m: any) => {
+            const balance = balances[m.user.id] || 0;
+            return (
+              <div key={m.user.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', fontSize: '14px', borderBottom: '1px solid #f0f0f0', paddingBottom: '12px' }}>
+                <span style={{ color: '#111', fontWeight: '500' }}>
+                  {m.user.name} {m.user.id === user?.id && <span style={{ color: '#999', fontSize: '12px' }}>(You)</span>}
+                </span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <span style={{ color: balance > 0 ? 'var(--primary)' : balance < 0 ? 'var(--secondary)' : '#999', fontWeight: 'bold' }}>
+                    {balance > 0 ? `owes $${balance.toFixed(2)}` : balance < 0 ? `gets back $${Math.abs(balance).toFixed(2)}` : 'settled up'}
+                  </span>
+                  {m.user.id !== user?.id && (
+                    <button onClick={() => handleRemoveMember(m.user.id)} style={{ background: 'transparent', border: 'none', color: '#dc2626', fontSize: '12px', cursor: 'pointer', padding: '0 4px' }} title="Remove user">
+                      ✕
+                    </button>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Settle Up Card */}
+        <div className="card" style={{ flex: 1, marginBottom: 0 }}>
+          <div className="card-header">
+            <h3 style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><DollarSign size={18} /> Settle Up</h3>
+          </div>
+          <form onSubmit={handleSettle}>
+            <div className="form-group">
+              <label>Record a payment to</label>
+              <select 
+                value={settleToId} 
+                onChange={e => setSettleToId(e.target.value)} 
+                required 
+              >
+                <option value="">Choose a member</option>
+                {group.members.filter((m: any) => m.user.id !== user?.id).map((m: any) => (
+                  <option key={m.user.id} value={m.user.id}>{m.user.name}</option>
+                ))}
+              </select>
+            </div>
+            <div className="form-group">
+              <label>Amount</label>
+              <input 
+                type="number" 
+                step="0.01"
+                placeholder="0.00" 
+                value={settleAmount} 
+                onChange={e => setSettleAmount(e.target.value)} 
+                required 
+              />
+            </div>
+            <button type="submit" className="btn-primary" style={{ width: '100%' }}>Record Payment</button>
+          </form>
+        </div>
+      </div>
+
       <div style={{ display: 'flex', gap: '30px', alignItems: 'flex-start' }}>
         {/* Left Column: Expenses */}
         <div style={{ flex: 2 }}>
@@ -304,67 +368,6 @@ const GroupDetail = () => {
         {/* Right Column: Sidebar modules */}
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '24px' }}>
           
-          {/* Balances Card */}
-          <div className="card" style={{ marginBottom: 0 }}>
-            <div className="card-header">
-              <h3>Group Balances</h3>
-            </div>
-            {group.members.map((m: any) => {
-              const balance = balances[m.user.id] || 0;
-              return (
-                <div key={m.user.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', fontSize: '14px', borderBottom: '1px solid #f0f0f0', paddingBottom: '12px' }}>
-                  <span style={{ color: '#111', fontWeight: '500' }}>
-                    {m.user.name} {m.user.id === user?.id && <span style={{ color: '#999', fontSize: '12px' }}>(You)</span>}
-                  </span>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <span style={{ color: balance > 0 ? 'var(--primary)' : balance < 0 ? 'var(--secondary)' : '#999', fontWeight: 'bold' }}>
-                      {balance > 0 ? `owes $${balance.toFixed(2)}` : balance < 0 ? `gets back $${Math.abs(balance).toFixed(2)}` : 'settled up'}
-                    </span>
-                    {m.user.id !== user?.id && (
-                      <button onClick={() => handleRemoveMember(m.user.id)} style={{ background: 'transparent', border: 'none', color: '#dc2626', fontSize: '12px', cursor: 'pointer', padding: '0 4px' }} title="Remove user">
-                        ✕
-                      </button>
-                    )}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-
-          {/* Settle Up Card */}
-          <div className="card" style={{ marginBottom: 0 }}>
-            <div className="card-header">
-              <h3 style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><DollarSign size={18} /> Settle Up</h3>
-            </div>
-            <form onSubmit={handleSettle}>
-              <div className="form-group">
-                <label>Record a payment to</label>
-                <select 
-                  value={settleToId} 
-                  onChange={e => setSettleToId(e.target.value)} 
-                  required 
-                >
-                  <option value="">Choose a member</option>
-                  {group.members.filter((m: any) => m.user.id !== user?.id).map((m: any) => (
-                    <option key={m.user.id} value={m.user.id}>{m.user.name}</option>
-                  ))}
-                </select>
-              </div>
-              <div className="form-group">
-                <label>Amount</label>
-                <input 
-                  type="number" 
-                  step="0.01"
-                  placeholder="0.00" 
-                  value={settleAmount} 
-                  onChange={e => setSettleAmount(e.target.value)} 
-                  required 
-                />
-              </div>
-              <button type="submit" className="btn-primary" style={{ width: '100%' }}>Record Payment</button>
-            </form>
-          </div>
-
           {/* Invite Card */}
           <div className="card" style={{ marginBottom: 0, backgroundColor: '#f9fafa' }}>
             <div className="card-header" style={{ borderBottom: 'none', marginBottom: 0, paddingBottom: '10px' }}>
