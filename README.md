@@ -19,7 +19,7 @@ This is a full-stack shared expenses application built to replace messy spreadsh
 ### 1. Backend (Render)
 - **Runtime**: Node.js
 - **Build Command**: `cd server && npm install && npx prisma generate && npm run build`
-- **Start Command**: `cd server && npm start`
+- **Start Command**: `cd server && npx prisma db push --accept-data-loss && npm start`
 - **Environment Variables**:
   - `DATABASE_URL`: Your Render Postgres connection string.
   - `JWT_SECRET`: A long random string.

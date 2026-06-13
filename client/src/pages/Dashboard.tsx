@@ -3,16 +3,40 @@ import { Link, useNavigate } from 'react-router-dom';
 import { LogOut, Upload, Users, PlusCircle, LayoutGrid, Terminal } from 'lucide-react';
 import api from '../services/api';
 import { useAuth } from '../context/AuthContext';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const Dashboard = () => {
   const [groups, setGroups] = useState<any[]>([]);
+  const [isCreating, setIsCreating] = useState(false);
+  const [newGroupName, setNewGroupName] = useState('');
+  const [createLoading, setCreateLoading] = useState(false);
   const { user, logout } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
-    api.get('/groups').then(res => setGroups(res.data));
+    fetchGroups();
   }, []);
+
+  const fetchGroups = () => {
+    api.get('/groups').then(res => setGroups(res.data));
+  };
+
+  const handleCreateGroup = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newGroupName.trim()) return;
+    
+    setCreateLoading(true);
+    try {
+      await api.post('/groups', { name: newGroupName });
+      setNewGroupName('');
+      setIsCreating(false);
+      fetchGroups();
+    } catch (err) {
+      console.error('Error creating group', err);
+    } finally {
+      setCreateLoading(false);
+    }
+  };
 
   const cardColors = ['bg-brutal-yellow', 'bg-brutal-blue', 'bg-brutal-pink', 'bg-brutal-green', 'bg-brutal-orange'];
 
@@ -47,10 +71,47 @@ const Dashboard = () => {
              <LayoutGrid size={24} strokeWidth={3} />
              <h2 className="text-2xl font-black uppercase italic">Your Groups</h2>
           </div>
-          <button className="brutal-btn bg-brutal-green! w-full md:w-auto">
+          <button 
+            onClick={() => setIsCreating(true)}
+            className="brutal-btn bg-brutal-green! w-full md:w-auto"
+          >
             <PlusCircle size={16} strokeWidth={3} /> CREATE GROUP
           </button>
         </div>
+
+        <AnimatePresence>
+          {isCreating && (
+            <motion.div 
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              className="overflow-hidden mb-8"
+            >
+              <form onSubmit={handleCreateGroup} className="brutal-card bg-white p-4 flex flex-col md:flex-row gap-4 items-end shadow-none! border-dashed!">
+                <div className="flex-1 w-full space-y-1">
+                  <label className="text-[10px] font-black uppercase">Initialize New Group Name</label>
+                  <input 
+                    type="text" 
+                    value={newGroupName}
+                    onChange={e => setNewGroupName(e.target.value)}
+                    placeholder="e.g. Flat 402, Road Trip 2026" 
+                    className="brutal-input text-sm"
+                    autoFocus
+                    required
+                  />
+                </div>
+                <div className="flex gap-2 w-full md:w-auto">
+                  <button type="submit" disabled={createLoading} className="brutal-btn bg-black! text-white! flex-1 md:flex-none justify-center">
+                    {createLoading ? 'SYNCING...' : 'INITIALIZE'}
+                  </button>
+                  <button type="button" onClick={() => setIsCreating(false)} className="brutal-btn bg-white! text-black! flex-1 md:flex-none justify-center">
+                    CANCEL
+                  </button>
+                </div>
+              </form>
+            </motion.div>
+          )}
+        </AnimatePresence>
         
         {groups.length === 0 ? (
           <div className="brutal-card bg-white py-12 text-center border-dashed">
