@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { ArrowLeft, UploadCloud, AlertCircle, CheckCircle2, FileText, Info } from 'lucide-react';
+import { ArrowLeft, UploadCloud, AlertCircle, CheckCircle2, FileText, Info, ShieldAlert, Cpu } from 'lucide-react';
 import api from '../services/api';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const Import = () => {
   const [file, setFile] = useState<File | null>(null);
@@ -51,144 +52,167 @@ const Import = () => {
   };
 
   return (
-    <div className="import-page app-container">
-      <header className="page-header">
+    <div className="max-w-7xl mx-auto p-6 md:p-12 space-y-12">
+      <header className="flex flex-col md:flex-row justify-between items-start md:items-end border-b-8 border-black pb-8 gap-8">
         <div>
-          <Link to="/" className="btn-text" style={{ marginBottom: '1rem' }}>
-            <ArrowLeft size={18} /> Back to Dashboard
+          <Link to="/" className="brutal-btn brutal-btn-outline py-2 px-4 shadow-[4px_4px_0px_#000] text-sm mb-4">
+            <ArrowLeft size={16} strokeWidth={3} /> ABORT IMPORT
           </Link>
-          <h1>Import Expenses</h1>
+          <div className="flex items-center gap-4 mt-4">
+            <div className="bg-black text-white p-3 border-3 border-black">
+              <Cpu size={32} strokeWidth={3} />
+            </div>
+            <h1 className="text-6xl md:text-8xl font-black italic tracking-tighter uppercase leading-[0.8]">
+              DATA INGEST
+            </h1>
+          </div>
         </div>
       </header>
 
-      {!report ? (
-        <div className="card" style={{ maxWidth: '600px', margin: '0 auto', textAlign: 'center', padding: '4rem 2rem' }}>
-          <div style={{ background: '#e0e7ff', width: '80px', height: '80px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyItems: 'center', margin: '0 auto 2rem' }}>
-             <UploadCloud size={40} style={{ color: '#4f46e5', margin: '0 auto' }} />
-          </div>
-          <h2 style={{ marginBottom: '1rem' }}>Upload CSV</h2>
-          <p style={{ color: '#64748b', marginBottom: '2rem', fontSize: '1.1rem' }}>Upload your <code>expenses_export.csv</code> file to begin the two-step import process.</p>
-          
-          <div className="form-group" style={{ marginBottom: '2rem' }}>
-            <label className="card" style={{ borderStyle: 'dashed', cursor: 'pointer', display: 'block', padding: '2rem', background: file ? '#f0fdf4' : 'rgba(255,255,255,0.5)' }}>
-              <input type="file" accept=".csv" onChange={handleFileChange} style={{ display: 'none' }} />
-              <FileText size={24} style={{ color: file ? '#10b981' : '#cbd5e1', marginBottom: '0.5rem' }} />
-              <div style={{ fontWeight: 600, color: file ? '#10b981' : '#475569' }}>
-                {file ? file.name : 'Select or drop CSV file'}
-              </div>
-            </label>
-          </div>
-
-          <button 
-            className="btn-primary" 
-            onClick={handleAnalyze} 
-            disabled={!file || analyzing}
-            style={{ width: '100%', padding: '1rem' }}
+      <AnimatePresence mode="wait">
+        {!report ? (
+          <motion.div 
+            key="upload"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 1.05 }}
+            className="max-w-3xl mx-auto"
           >
-            {analyzing ? 'Analyzing Data...' : 'Analyze CSV Content'}
-          </button>
-          {error && <p className="error-text" style={{ marginTop: '1rem' }}>{error}</p>}
-        </div>
-      ) : (
-        <div className="report-container" style={{ animation: 'fadeIn 0.4s ease-out' }}>
-          <div className="card summary-card" style={{ marginBottom: '3rem' }}>
-            <h2 style={{ marginBottom: '2rem', textAlign: 'center' }}>Analysis Summary</h2>
-            <div className="grid" style={{ gridTemplateColumns: 'repeat(3, 1fr)', marginBottom: '3rem' }}>
-              <div className="stat-item">
-                <span className="stat-label">Total Rows</span>
-                <span className="stat-value">{report.processedData.length + report.anomalies.filter((a: any) => a.actionTaken === 'SKIPPED').length}</span>
+            <div className="brutal-card bg-white p-12 text-center space-y-10">
+              <div className="bg-brutal-yellow inline-block p-8 border-4 border-black shadow-[12px_12px_0px_#000]">
+                 <UploadCloud size={64} strokeWidth={3} />
               </div>
-              <div className="stat-item" style={{ borderColor: '#10b981', background: '#ecfdf5' }}>
-                <span className="stat-label" style={{ color: '#059669' }}>Ready to Import</span>
-                <span className="stat-value" style={{ color: '#10b981' }}>{report.processedData.length}</span>
+              
+              <div className="space-y-4">
+                <h2 className="text-4xl font-black uppercase italic">Initialize Feed</h2>
+                <p className="font-bold text-xl text-slate-500 uppercase">Input source: <code>expenses_export.csv</code></p>
               </div>
-              <div className="stat-item" style={{ borderColor: '#f59e0b', background: '#fffbeb' }}>
-                <span className="stat-label" style={{ color: '#d97706' }}>Anomalies</span>
-                <span className="stat-value" style={{ color: '#f59e0b' }}>{report.anomalies.length}</span>
-              </div>
-            </div>
-            
-            <div className="approval-actions" style={{ display: 'flex', justifyContent: 'center', gap: '1.5rem' }}>
-              <button 
-                className="btn-primary" 
-                onClick={handleExecute} 
-                disabled={executing}
-                style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '1rem 3rem' }}
-              >
-                {executing ? 'Processing...' : <><CheckCircle2 size={20} /> Approve & Import All</>}
-              </button>
-              <button className="btn-outline" onClick={() => setReport(null)} style={{ padding: '1rem 2rem' }}>Cancel</button>
-            </div>
-          </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.5rem' }}>
-            <AlertCircle size={24} style={{ color: '#f59e0b' }} />
-            <h2 style={{ margin: 0 }}>Anomaly Report</h2>
-          </div>
-          <div className="card" style={{ padding: '0', overflow: 'hidden', marginBottom: '3rem' }}>
-             <div style={{ padding: '1.5rem', background: '#f8fafc', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-               <Info size={18} style={{ color: '#64748b' }} />
-               <p className="meera-quote" style={{ margin: 0 }}>"I want to approve anything the app deletes or changes." — Meera</p>
-             </div>
-             <div style={{ overflowX: 'auto' }}>
-               <table className="report-table">
-                 <thead>
-                   <tr>
-                     <th style={{ paddingLeft: '1.5rem' }}>Row</th>
-                     <th>Issue Type</th>
-                     <th>Description</th>
-                     <th style={{ paddingRight: '1.5rem' }}>Action Taken</th>
-                   </tr>
-                 </thead>
-                 <tbody>
-                   {report.anomalies.map((a: any, idx: number) => (
-                     <tr key={idx} className={a.actionTaken.toLowerCase()}>
-                       <td style={{ paddingLeft: '1.5rem', fontWeight: 700 }}>{a.rowNumber}</td>
-                       <td><code style={{ fontSize: '0.75rem', color: '#4f46e5' }}>{a.type}</code></td>
-                       <td>{a.description}</td>
-                       <td style={{ paddingRight: '1.5rem' }}>
-                         <span style={{ 
-                           padding: '0.25rem 0.75rem', 
-                           borderRadius: '99px', 
-                           fontSize: '0.75rem', 
-                           fontWeight: 700,
-                           background: a.actionTaken === 'SKIPPED' ? '#fee2e2' : a.actionTaken === 'ADJUSTED' ? '#fefce8' : '#ecfdf5',
-                           color: a.actionTaken === 'SKIPPED' ? '#ef4444' : a.actionTaken === 'ADJUSTED' ? '#d97706' : '#10b981'
-                         }}>
-                           {a.actionTaken}
-                         </span>
-                       </td>
-                     </tr>
-                   ))}
-                 </tbody>
-               </table>
-             </div>
-          </div>
-
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.5rem' }}>
-            <CheckCircle2 size={24} style={{ color: '#10b981' }} />
-            <h2 style={{ margin: 0 }}>Preview Data</h2>
-          </div>
-          <div className="card">
-            <div className="grid" style={{ gridTemplateColumns: '1fr 1fr' }}>
-              {report.processedData.slice(0, 10).map((item: any, idx: number) => (
-                <div key={idx} style={{ padding: '0.75rem', background: '#f8fafc', borderRadius: '10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <div style={{ display: 'flex', flexDirection: 'column' }}>
-                    <span style={{ fontSize: '0.7rem', fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase' }}>Row {item.rowNum} • {item.type}</span>
-                    <span style={{ fontWeight: 600 }}>{item.data.description}</span>
+              <div className="relative group">
+                <label className="brutal-card block border-dashed border-4 cursor-pointer p-16 hover:bg-slate-50 transition-colors">
+                  <input type="file" accept=".csv" onChange={handleFileChange} className="hidden" />
+                  <FileText size={40} className={`mx-auto mb-4 ${file ? 'text-brutal-green' : 'text-slate-300'}`} />
+                  <div className="text-2xl font-black uppercase">
+                    {file ? file.name : 'Select data packet'}
                   </div>
-                  <span style={{ fontWeight: 800, color: '#1e293b' }}>₹{item.data.amount.toLocaleString()}</span>
+                </label>
+              </div>
+
+              <button 
+                className="brutal-btn brutal-btn-primary w-full text-3xl py-6 hover:translate-x-2 hover:translate-y-2 hover:shadow-none disabled:opacity-50 disabled:cursor-not-allowed" 
+                onClick={handleAnalyze} 
+                disabled={!file || analyzing}
+              >
+                {analyzing ? 'SCANNING SECTORS...' : 'START SYSTEM ANALYSIS'}
+              </button>
+              
+              {error && (
+                <div className="bg-black text-white p-6 font-black uppercase text-center border-4 border-brutal-pink">
+                  FATAL ERROR: {error}
                 </div>
-              ))}
-              {report.processedData.length > 10 && (
-                 <div style={{ gridColumn: '1 / -1', textAlign: 'center', color: '#64748b', fontSize: '0.9rem', marginTop: '1rem' }}>
-                   ... and {report.processedData.length - 10} more expenses
-                 </div>
               )}
             </div>
-          </div>
-        </div>
-      )}
+          </motion.div>
+        ) : (
+          <motion.div 
+            key="report"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="space-y-12"
+          >
+            <section className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div className="brutal-card bg-white p-8 text-center border-b-[12px] border-b-black shadow-none!">
+                <span className="text-sm font-black uppercase tracking-widest text-slate-400">Total Scan</span>
+                <div className="text-7xl font-black italic">{report.processedData.length + report.anomalies.filter((a: any) => a.actionTaken === 'SKIPPED').length}</div>
+              </div>
+              <div className="brutal-card bg-brutal-green! p-8 text-center border-b-[12px] border-b-black shadow-none!">
+                <span className="text-sm font-black uppercase tracking-widest text-black/60">Integrity Verified</span>
+                <div className="text-7xl font-black italic">{report.processedData.length}</div>
+              </div>
+              <div className="brutal-card bg-brutal-pink! p-8 text-center border-b-[12px] border-b-black shadow-none!">
+                <span className="text-sm font-black uppercase tracking-widest text-black/60">Data Exceptions</span>
+                <div className="text-7xl font-black italic">{report.anomalies.length}</div>
+              </div>
+            </section>
+
+            <section className="brutal-card bg-black text-white py-12 px-8 flex flex-col md:flex-row justify-between items-center gap-8 shadow-[12px_12px_0px_#fde047]">
+              <div className="space-y-2">
+                <h2 className="text-4xl font-black uppercase italic italic leading-none">Awaiting Clearance</h2>
+                <p className="font-bold text-brutal-yellow uppercase tracking-widest">Final validation required from terminal: Meera</p>
+              </div>
+              <div className="flex gap-4 w-full md:w-auto">
+                <button 
+                  className="brutal-btn bg-brutal-green! text-black text-2xl py-5 px-12 hover:shadow-[4px_4px_0px_white]" 
+                  onClick={handleExecute} 
+                  disabled={executing}
+                >
+                  {executing ? 'WRITING TO DISK...' : 'APPROVE & COMMIT'}
+                </button>
+                <button className="brutal-btn bg-white text-black text-2xl py-5 px-12" onClick={() => setReport(null)}>REJECT</button>
+              </div>
+            </section>
+
+            <section className="space-y-6">
+              <div className="flex items-center gap-3">
+                <ShieldAlert size={32} strokeWidth={3} />
+                <h2 className="text-4xl font-black uppercase italic">Exception Manifest</h2>
+              </div>
+              <div className="brutal-card p-0 overflow-hidden bg-white">
+                 <table className="report-table">
+                   <thead>
+                     <tr>
+                       <th>Index</th>
+                       <th>Class</th>
+                       <th>Diagnostic Log</th>
+                       <th>Resolution</th>
+                     </tr>
+                   </thead>
+                   <tbody>
+                     {report.anomalies.map((a: any, idx: number) => (
+                       <tr key={idx}>
+                         <td className="font-black text-xl italic">#{a.rowNumber}</td>
+                         <td><code className="bg-black text-white px-2 py-1 text-xs">{a.type}</code></td>
+                         <td className="font-bold">{a.description}</td>
+                         <td>
+                           <span className={`brutal-badge text-lg ${
+                             a.actionTaken === 'SKIPPED' ? 'bg-brutal-pink' : 
+                             a.actionTaken === 'ADJUSTED' ? 'bg-brutal-orange' : 'bg-brutal-green'
+                           }`}>
+                             {a.actionTaken}
+                           </span>
+                         </td>
+                       </tr>
+                     ))}
+                   </tbody>
+                 </table>
+              </div>
+            </section>
+
+            <section className="space-y-6">
+               <div className="flex items-center gap-3">
+                <CheckCircle2 size={32} strokeWidth={3} className="text-brutal-green" />
+                <h2 className="text-4xl font-black uppercase italic text-brutal-green drop-shadow-[2px_2px_0px_black]">Transaction Preview</h2>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {report.processedData.slice(0, 12).map((item: any, idx: number) => (
+                  <div key={idx} className="brutal-card bg-white p-4 flex justify-between items-center group hover:bg-black hover:text-white">
+                    <div className="flex flex-col">
+                      <span className="text-[10px] font-black uppercase group-hover:text-brutal-yellow">LOG: {item.rowNum} // TYPE: {item.type}</span>
+                      <span className="text-xl font-black uppercase tracking-tighter italic">{item.data.description}</span>
+                    </div>
+                    <div className="text-3xl font-black italic tracking-tighter">₹{item.data.amount.toLocaleString()}</div>
+                  </div>
+                ))}
+              </div>
+              {report.processedData.length > 12 && (
+                 <div className="text-center font-black uppercase italic text-slate-400 py-10 border-t-4 border-black border-dashed">
+                   [ STREAM TRUNCATED: {report.processedData.length - 12} ADDITIONAL ENTRIES ]
+                 </div>
+              )}
+            </section>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
