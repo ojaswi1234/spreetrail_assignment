@@ -1,0 +1,11 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const expenseController_1 = require("../controllers/expenseController");
+const auth_1 = require("../middleware/auth");
+const router = (0, express_1.Router)();
+router.use(auth_1.authenticateJWT);
+router.post('/', expenseController_1.createExpense);
+router.get('/group/:groupId', expenseController_1.getExpensesByGroup);
+router.get('/group/:groupId/balances', expenseController_1.getGroupBalances);
+exports.default = router;

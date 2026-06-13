@@ -61,7 +61,7 @@ export const getGroups = async (req: AuthRequest, res: Response) => {
 
 export const getGroupById = async (req: AuthRequest, res: Response) => {
   try {
-    const { id } = req.params;
+    const id = req.params.id as string;
     const group = await prisma.group.findUnique({
       where: { id },
       include: {
@@ -85,7 +85,7 @@ export const getGroupById = async (req: AuthRequest, res: Response) => {
 
 export const addMember = async (req: AuthRequest, res: Response) => {
   try {
-    const { id } = req.params;
+    const id = req.params.id as string;
     const { userId, joinedAt, leftAt } = req.body;
 
     const membership = await prisma.groupMember.create({

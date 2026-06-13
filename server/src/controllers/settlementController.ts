@@ -24,7 +24,7 @@ export const createSettlement = async (req: AuthRequest, res: Response) => {
 
 export const getSettlementsByGroup = async (req: AuthRequest, res: Response) => {
   try {
-    const { groupId } = req.params;
+    const groupId = req.params.groupId as string;
     const settlements = await prisma.settlement.findMany({
       where: { groupId },
       include: {

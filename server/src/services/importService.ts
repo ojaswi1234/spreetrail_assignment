@@ -33,7 +33,7 @@ export const analyzeCSVData = async (buffer: Buffer, groupId: string) => {
   const seenEntries = new Set<string>();
 
   for (let i = 0; i < records.length; i++) {
-    const row = records[i];
+    const row = records[i] as any;
     const rowNum = i + 2; // +1 for 0-index, +1 for header row
 
     // 1. Detect Missing Payer or Amount
@@ -75,7 +75,7 @@ export const analyzeCSVData = async (buffer: Buffer, groupId: string) => {
 
     // 4. Normalize Name Variations
     const normalizedPayerName = row.paid_by.trim().toLowerCase();
-    const payer = users.find((u) => u.name.toLowerCase() === normalizedPayerName || u.name.toLowerCase() === normalizedPayerName.split(' ')[0]);
+    const payer = users.find((u: any) => u.name.toLowerCase() === normalizedPayerName || u.name.toLowerCase() === normalizedPayerName.split(' ')[0]);
     
     if (!payer) {
        anomalies.push({
@@ -117,7 +117,7 @@ export const analyzeCSVData = async (buffer: Buffer, groupId: string) => {
     // Policy: If split_type is empty and split_with is a single person, it's a settlement
     if (!row.split_type && row.split_with && !row.split_with.includes(';')) {
       const recipientName = row.split_with.trim().toLowerCase();
-      const recipient = users.find(u => u.name.toLowerCase() === recipientName);
+      const recipient = users.find((u: any) => u.name.toLowerCase() === recipientName);
       if (recipient) {
          processedData.push({
           type: 'SETTLEMENT',
@@ -170,9 +170,9 @@ export const analyzeCSVData = async (buffer: Buffer, groupId: string) => {
     const expenseDate = parseDate(row.date);
     const validSplitMembers = [];
     for (const name of splitWithNames) {
-      const user = users.find(u => u.name.toLowerCase() === name);
+      const user = users.find((u: any) => u.name.toLowerCase() === name);
       if (user) {
-        const membership = group.members.find(m => m.userId === user.id);
+        const membership = group.members.find((m: any) => m.userId === user.id);
         if (membership) {
           if (membership.leftAt && expenseDate > membership.leftAt) {
              anomalies.push({
@@ -224,11 +224,11 @@ export const analyzeCSVData = async (buffer: Buffer, groupId: string) => {
         date: expenseDate,
         splitType,
         notes: row.notes,
-        splits: validSplitMembers.map(u => {
+        splits: validSplitMembers.map((u: any) => {
            // Basic logic for shareValue from split_details if needed
            let shareValue = null;
            if (splitType !== 'EQUAL') {
-              const detail = splitDetails.find(d => d.toLowerCase().startsWith(u.name.toLowerCase()));
+              const detail = splitDetails.find((d: any) => d.toLowerCase().startsWith(u.name.toLowerCase()));
               if (detail) {
                 const match = detail.match(/[\d.]+/);
                 if (match) shareValue = parseFloat(match[0]);

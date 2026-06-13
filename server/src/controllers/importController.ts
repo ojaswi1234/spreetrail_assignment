@@ -40,7 +40,7 @@ export const executeImport = async (req: AuthRequest, res: Response) => {
     const { importLogId, groupId, processedData } = req.body;
 
     // Use a transaction to ensure all or nothing
-    await prisma.$transaction(async (tx) => {
+    await prisma.$transaction(async (tx: any) => {
       for (const item of processedData) {
         if (item.type === 'EXPENSE') {
           const { amount, splits, date, ...rest } = item.data;
@@ -111,7 +111,7 @@ export const executeImport = async (req: AuthRequest, res: Response) => {
 
 export const getImportReport = async (req: AuthRequest, res: Response) => {
   try {
-    const { id } = req.params;
+    const id = req.params.id as string;
     const log = await prisma.importLog.findUnique({
       where: { id },
       include: { anomalies: true }

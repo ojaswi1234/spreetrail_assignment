@@ -79,7 +79,7 @@ export const createExpense = async (req: AuthRequest, res: Response) => {
 
 export const getExpensesByGroup = async (req: AuthRequest, res: Response) => {
   try {
-    const { groupId } = req.params;
+    const groupId = req.params.groupId as string;
     const expenses = await prisma.expense.findMany({
       where: { groupId },
       include: {
@@ -96,7 +96,7 @@ export const getExpensesByGroup = async (req: AuthRequest, res: Response) => {
 
 export const getGroupBalances = async (req: AuthRequest, res: Response) => {
   try {
-    const { groupId } = req.params;
+    const groupId = req.params.groupId as string;
 
     const group = await prisma.group.findUnique({
       where: { id: groupId },
@@ -114,18 +114,18 @@ export const getGroupBalances = async (req: AuthRequest, res: Response) => {
       where: { groupId }
     });
 
-    const netBalances = calculateNetBalances(expenses, settlements, group.members);
+    const netBalances: any = calculateNetBalances(expenses, settlements, group.members);
     const simplifiedDebts = simplifyDebts(netBalances);
 
     // Map simplified debts with names
-    const debtsWithNames = simplifiedDebts.map(debt => ({
+    const debtsWithNames = simplifiedDebts.map((debt: any) => ({
       ...debt,
-      fromName: group.members.find(m => m.userId === debt.from)?.user.name,
-      toName: group.members.find(m => m.userId === debt.to)?.user.name
+      fromName: group.members.find((m: any) => m.userId === debt.from)?.user.name,
+      toName: group.members.find((m: any) => m.userId === debt.to)?.user.name
     }));
 
     // Construct per-user summary
-    const individualSummaries = group.members.map(member => {
+    const individualSummaries = group.members.map((member: any) => {
       const net = netBalances[member.userId] || 0;
       return {
         userId: member.userId,
