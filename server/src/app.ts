@@ -15,6 +15,11 @@ app.use(cors(
 ));
 app.use(express.json());
 
+// Health Check
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'ok', timestamp: new Date().toISOString() });
+});
+
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/groups', groupRoutes);

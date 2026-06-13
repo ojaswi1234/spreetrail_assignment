@@ -14,36 +14,32 @@ This is a full-stack shared expenses application built to replace messy spreadsh
 - **Backend**: Node.js, Express (TypeScript), Prisma.
 - **Database**: PostgreSQL (SQLite used for local development).
 
-## Setup Instructions
+## Production Deployment
 
-### Prerequisites
-- Node.js (v18+)
-- npm
+### 1. Backend (Render)
+- **Runtime**: Node.js
+- **Build Command**: `cd server && npm install && npx prisma generate && npm run build`
+- **Start Command**: `cd server && npm start`
+- **Environment Variables**:
+  - `DATABASE_URL`: Your Render Postgres connection string.
+  - `JWT_SECRET`: A long random string.
+  - `PORT`: `5000` (or as provided by Render).
 
-### 1. Backend Setup
+### 2. Frontend (Vercel)
+- **Framework Preset**: Vite
+- **Root Directory**: `client`
+- **Build Command**: `npm run build`
+- **Output Directory**: `dist`
+- **Environment Variables**:
+  - `VITE_API_URL`: `https://spreetrail-assignment-backend.onrender.com/api` (optional, as it's now the default).
+
+### 3. Database
+After connecting the Postgres database on Render, you may need to seed the initial data:
 ```bash
 cd server
-npm install
 npx prisma migrate dev
 npx prisma db seed
-npm run dev
 ```
-The server will run on [http://localhost:5000](http://localhost:5000).
-
-### 2. Frontend Setup
-```bash
-cd client
-npm install
-npm run dev
-```
-The client will run on [http://localhost:5173](http://localhost:5173).
-
-## CSV Import
-1. Login to the app (e.g., `aisha@example.com` / `password123`).
-2. Navigate to "Import CSV".
-3. Upload `expenses_export.csv`.
-4. Review the anomaly report and the "Ready to Import" list.
-5. Click "Approve & Import" to finalize.
 
 ## Project Documents
 - `SCOPE.md`: Anomaly log and database schema.
