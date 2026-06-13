@@ -1,20 +1,18 @@
-# Splitwise Clone MVP
+# Shared Expenses App (Spreetail Assignment)
 
-This project is a simplified clone of Splitwise, built as part of an internship assignment.
+This is a full-stack shared expenses application built to replace messy spreadsheets. It features a robust CSV importer that handles data anomalies, supports dynamic group membership (members joining/leaving), and provides simplified debt settlement.
 
-## Features
-- **User Authentication**: Secure register and login.
-- **Group Management**: Create groups and manage members.
-- **Expense Tracking**: Add expenses with multiple split modes (Equal, Exact, Percentage, Share).
-- **Real-time Chat**: Discuss expenses within the app using WebSockets.
-- **Balance Summaries**: Real-time calculation of who owes whom.
-- **Debt Settlement**: Record payments to settle balances.
+## Persona Requirements Addressed:
+- **Aisha**: "one number per person" - Implemented via simplified debt calculation.
+- **Rohan**: "No magic numbers" - Detailed breakdown view shows exactly which expenses make up a balance.
+- **Priya**: Currency Support - USD expenses are converted to INR at import time.
+- **Sam**: Date Isolation - Sam is only charged for expenses after his move-in date.
+- **Meera**: Approval Flow - A two-step import process allows reviewing and approving all CSV changes/deletions.
 
 ## Tech Stack
-- **Frontend**: React, TypeScript, Vite, Vanilla CSS.
-- **Backend**: Node.js, Express, TypeScript, Socket.io.
-- **Database**: PostgreSQL (Prisma ORM) - *SQLite used for local development portability*.
-- **AI Tool**: Gemini CLI (Interactive Agent).
+- **Frontend**: React (TypeScript), Vite, Vanilla CSS.
+- **Backend**: Node.js, Express (TypeScript), Prisma.
+- **Database**: PostgreSQL (SQLite used for local development).
 
 ## Setup Instructions
 
@@ -22,19 +20,32 @@ This project is a simplified clone of Splitwise, built as part of an internship 
 - Node.js (v18+)
 - npm
 
-### Server Setup
-1. Navigate to the `server` directory: `cd server`
-2. Install dependencies: `npm install`
-3. Initialize the database: `npx prisma migrate dev`
-4. Start the server: `npm run dev` (Runs on port 5000)
+### 1. Backend Setup
+```bash
+cd server
+npm install
+npx prisma migrate dev
+npx prisma db seed
+npm run dev
+```
+The server will run on [http://localhost:5000](http://localhost:5000).
 
-### Client Setup
-1. Navigate to the `client` directory: `cd client`
-2. Install dependencies: `npm install`
-3. Start the development server: `npm run dev` (Runs on port 5173)
+### 2. Frontend Setup
+```bash
+cd client
+npm install
+npm run dev
+```
+The client will run on [http://localhost:5173](http://localhost:5173).
 
-## AI Collaboration
-This project was built in collaboration with Gemini CLI. The full context of the AI's decision-making process and instructions can be found in `AI_CONTEXT.md`.
+## CSV Import
+1. Login to the app (e.g., `aisha@example.com` / `password123`).
+2. Navigate to "Import CSV".
+3. Upload `expenses_export.csv`.
+4. Review the anomaly report and the "Ready to Import" list.
+5. Click "Approve & Import" to finalize.
 
-## Build Plan
-The roadmap and trade-offs are documented in `BUILD_PLAN.md`.
+## Project Documents
+- `SCOPE.md`: Anomaly log and database schema.
+- `DECISIONS.md`: Decision log for architectural choices.
+- `AI_USAGE.md`: Report on AI collaboration and error correction.

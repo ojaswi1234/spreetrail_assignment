@@ -1,14 +1,13 @@
-import express from 'express';
-import { createExpense, getGroupExpenses, getExpenseChat, postChatMessage } from '../controllers/expenseController';
-import { authMiddleware } from '../middleware/authMiddleware';
+import { Router } from 'express';
+import { createExpense, getExpensesByGroup, getGroupBalances } from '../controllers/expenseController';
+import { authenticateJWT } from '../middleware/auth';
 
-const router = express.Router();
+const router = Router();
 
-router.use(authMiddleware);
+router.use(authenticateJWT as any);
 
-router.post('/', createExpense);
-router.get('/group/:groupId', getGroupExpenses);
-router.get('/:expenseId/chat', getExpenseChat);
-router.post('/:expenseId/chat', postChatMessage);
+router.post('/', createExpense as any);
+router.get('/group/:groupId', getExpensesByGroup as any);
+router.get('/group/:groupId/balances', getGroupBalances as any);
 
 export default router;

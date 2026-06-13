@@ -1,12 +1,12 @@
-import express from 'express';
-import { recordSettlement, getBalances } from '../controllers/settlementController';
-import { authMiddleware } from '../middleware/authMiddleware';
+import { Router } from 'express';
+import { createSettlement, getSettlementsByGroup } from '../controllers/settlementController';
+import { authenticateJWT } from '../middleware/auth';
 
-const router = express.Router();
+const router = Router();
 
-router.use(authMiddleware);
+router.use(authenticateJWT as any);
 
-router.post('/', recordSettlement);
-router.get('/group/:groupId/balances', getBalances);
+router.post('/', createSettlement as any);
+router.get('/group/:groupId', getSettlementsByGroup as any);
 
 export default router;

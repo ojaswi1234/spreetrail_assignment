@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import api from '../services/api';
 import { useAuth } from '../context/AuthContext';
 
 const Login = () => {
@@ -12,56 +13,38 @@ const Login = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await fetch('https://spreetrail-assignment-backend.onrender.com/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-      });
-      const data = await response.json();
-      if (response.ok) {
-        login(data.user, data.token);
-        navigate('/');
-      } else {
-        setError(data.message);
-      }
-    } catch (err) {
-      setError('Something went wrong');
+      const res = await api.post('/auth/login', { email, password });
+      login(res.data.token, res.data.user);
+      navigate('/');
+    } catch (err: any) {
+      setError(err.response?.data?.message || 'Login failed');
     }
   };
 
   return (
-    <div className="auth-container">
-      <div className="auth-card">
-        <h2 className="auth-title">Log in</h2>
-        <p className="auth-subtitle">Welcome back to Splitwise</p>
-        
-        {error && <div style={{ background: '#fee2e2', color: '#dc2626', padding: '10px', borderRadius: '6px', marginBottom: '20px', fontSize: '14px', textAlign: 'center' }}>{error}</div>}
-        
+    <div className="login-page">
+      <div className="card">
+        <h2>Shared Expenses Login</h2>
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label>Email address</label>
-            <input 
-              type="email" 
-              value={email} 
-              onChange={(e) => setEmail(e.target.value)} 
-              required 
-            />
+            <label>Email</label>
+            <input type="email" value={email} onChange={e => setEmail(e.target.value)} required />
           </div>
           <div className="form-group">
             <label>Password</label>
-            <input 
-              type="password" 
-              value={password} 
-              onChange={(e) => setPassword(e.target.value)} 
-              required 
-            />
+            <input type="password" value={password} onChange={e => setPassword(e.target.value)} required />
           </div>
-          <button type="submit" className="btn-primary" style={{ width: '100%', padding: '12px', marginTop: '10px', fontSize: '16px' }}>Log in</button>
+          {error && <p className="error-text">{error}</p>}
+          <button type="submit" className="btn-primary">Login</button>
         </form>
-        
-        <p style={{ marginTop: '24px', textAlign: 'center', fontSize: '14px', color: '#666' }}>
-          Don't have an account? <Link to="/register" style={{ color: 'var(--primary)', fontWeight: '600' }}>Sign up</Link>
-        </p>
+        <div style={{ marginTop: '20px', fontSize: '0.8rem', color: '#666' }}>
+          <p>Demo accounts (password: password123):</p>
+          <ul>
+            <li>aisha@example.com</li>
+            <li>rohan@example.com</li>
+            <li>priya@example.com</li>
+          </ul>
+        </div>
       </div>
     </div>
   );

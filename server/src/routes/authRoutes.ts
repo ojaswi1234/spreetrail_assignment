@@ -1,9 +1,11 @@
-import express from 'express';
-import { login, register } from '../controllers/authController';
+import { Router } from 'express';
+import { register, login, getMe } from '../controllers/authController';
+import { authenticateJWT } from '../middleware/auth';
 
-const router = express.Router();
+const router = Router();
 
 router.post('/register', register);
 router.post('/login', login);
+router.get('/me', authenticateJWT as any, getMe as any);
 
 export default router;

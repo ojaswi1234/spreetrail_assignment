@@ -1,70 +1,53 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
-import Landing from './pages/Landing';
 import Login from './pages/Login';
-import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
-import AllGroups from './pages/AllGroups';
 import GroupDetail from './pages/GroupDetail';
-import Navbar from './components/Navbar';
-import Sidebar from './components/Sidebar';
-import './index.css';
+import Import from './pages/Import';
+import './App.css';
 
-const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+const PrivateRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user, loading } = useAuth();
-  if (loading) return <div style={{ padding: '40px', textAlign: 'center' }}>Loading...</div>;
-  if (!user) return <Navigate to="/login" />;
-  return (
-    <div className="layout-wrapper">
-      <Sidebar />
-      <div className="main-content">
-        {children}
-      </div>
-    </div>
-  );
+  if (loading) return <div>Loading...</div>;
+  return user ? <>{children}</> : <Navigate to="/login" />;
 };
 
 function App() {
   return (
-    <Router>
-      <AuthProvider>
-        <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-          <Navbar />
+    <AuthProvider>
+      <Router>
+        <div className="app-container">
           <Routes>
-            <Route path="/" element={<Landing />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
             <Route 
-              path="/dashboard" 
+              path="/" 
               element={
-                <ProtectedRoute>
+                <PrivateRoute>
                   <Dashboard />
-                </ProtectedRoute>
+                </PrivateRoute>
               } 
             />
             <Route 
-              path="/groups" 
+              path="/groups/:id" 
               element={
-                <ProtectedRoute>
-                  <AllGroups />
-                </ProtectedRoute>
-              } 
-            />
-            <Route 
-              path="/group/:id" 
-              element={
-                <ProtectedRoute>
+                <PrivateRoute>
                   <GroupDetail />
-                </ProtectedRoute>
+                </PrivateRoute>
               } 
             />
-            {/* Catch-all redirect to home */}
-            <Route path="*" element={<Navigate to="/" />} />
+            <Route 
+              path="/import" 
+              element={
+                <PrivateRoute>
+                  <Import />
+                </PrivateRoute>
+              } 
+            />
           </Routes>
         </div>
-      </AuthProvider>
-    </Router>
+      </Router>
+    </AuthProvider>
   );
 }
 
