@@ -8,25 +8,25 @@
   --color-brutal-orange: #fb923c;
   --color-brutal-bg: #fffbeb;
   
-  --shadow-brutal: 6px 6px 0px 0px rgba(0, 0, 0, 1);
-  --shadow-brutal-hover: 2px 2px 0px 0px rgba(0, 0, 0, 1);
-  --shadow-brutal-lg: 12px 12px 0px 0px rgba(0, 0, 0, 1);
+  --shadow-brutal: 4px 4px 0px 0px rgba(0, 0, 0, 1);
+  --shadow-brutal-hover: 1px 1px 0px 0px rgba(0, 0, 0, 1);
+  --shadow-brutal-lg: 8px 8px 0px 0px rgba(0, 0, 0, 1);
   
-  --border-width-3: 3px;
+  --border-width-3: 2px;
 }
 
 @layer base {
   body {
-    @apply bg-brutal-bg text-black font-sans selection:bg-black selection:text-white;
+    @apply bg-brutal-bg text-black font-sans selection:bg-black selection:text-white text-sm;
   }
 }
 
 .brutal-card {
-  @apply bg-white border-3 border-black shadow-brutal transition-all duration-150 hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-brutal-hover;
+  @apply bg-white border-2 border-black shadow-brutal transition-all duration-150 hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-brutal-hover;
 }
 
 .brutal-btn {
-  @apply inline-flex items-center gap-2 px-6 py-3 font-black uppercase border-3 border-black shadow-brutal transition-all duration-150 active:translate-x-[4px] active:translate-y-[4px] active:shadow-none;
+  @apply inline-flex items-center gap-2 px-4 py-2 font-black uppercase border-2 border-black shadow-brutal transition-all duration-150 active:translate-x-[2px] active:translate-y-[2px] active:shadow-none text-xs;
 }
 
 .brutal-btn-primary {
@@ -38,7 +38,7 @@
 }
 
 .brutal-input {
-  @apply w-full px-4 py-3 text-lg font-bold border-3 border-black focus:outline-none focus:shadow-brutal focus:-translate-x-[2px] focus:-translate-y-[2px] transition-all duration-150;
+  @apply w-full px-3 py-2 text-base font-bold border-2 border-black focus:outline-none focus:shadow-brutal focus:-translate-x-[1px] focus:-translate-y-[1px] transition-all duration-150;
 }
 
 .brutal-badge {
